@@ -127,7 +127,7 @@ function displayError(error) {
     var data;
     data = fields();
 		lineAngle = scaleSecs(data[0].numeric)-1;
-		if(data[0].numeric%80 ==0) {
+		if(data[0].numeric%800 ==0) {
 			updateData();
 		}
 			
@@ -136,7 +136,7 @@ function displayError(error) {
 	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.polar[1] <= 2*pi) { return d.polar[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar[1])+3;})
 	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.polar[1] <= 2*pi) { return d.polar[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar[1])+3;})
 	  .attr('fill', green)
-	  .style('opacity',function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return (2*pi-((2*pi+lineAngle) - d.theta))/(2*pi);}else return (2*pi-(lineAngle - d.theta))/(2*pi);})
+	  .style('opacity',function(d) {if((2*pi+lineAngle) - d.polar[1] <= 2*pi) { return (2*pi-((2*pi+lineAngle) - d.polar[1]))/(2*pi);}else return (2*pi-(lineAngle - d.polar[1]))/(2*pi);})
 	  .on("click", function(d) {
 		window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
 	  });
