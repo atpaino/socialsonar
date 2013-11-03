@@ -14,7 +14,7 @@ auth = OAuth(access_key, access_secret, consumer_key, consumer_secret)
 twitter = Twitter(auth = auth)
 
 def home(request):
-    return render(request, 'socialsonar/index.html', {})
+    return render_to_response('socialsonar/index.html', {})
 
 def ping(request, latitude, longitude):
     # Convert latitude and longitude to floating point type
