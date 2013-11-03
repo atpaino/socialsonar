@@ -36,7 +36,7 @@ def ping(request, latitude, longitude):
         dy = longitude-coords[1]
         comp = complex(dx*69, dy*69)
         p = cmath.polar(comp)
-        polar = [int(p[0]*100),p[1] if p[1] > 0 else p[1] + 2*math.pi]
+        polar = ["%.2f" % p[0],p[1] if p[1] > 0 else p[1] + 2*math.pi]
         tweet =	{
             "id":tweet["id"],
             "text":tweet["text"],
