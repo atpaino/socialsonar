@@ -103,10 +103,6 @@ function displayError(error) {
   };
   
   function updateData() {
-  if (dbIndex == "") {
-		document.getElementById("selected_node_publications").innerHTML = "No Publications For This User";
-		return;
-	}
 	if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp = new XMLHttpRequest();
 	} else { // code for IE6, IE5
@@ -120,7 +116,6 @@ function displayError(error) {
 			circ = clockGroup.selectAll("ellipse")
 				.data(tweetData2)
 				.enter().append("ellipse");
-			document.getElementById("selected_node_publications").innerHTML = xmlhttp.responseText;
 		}
 	}
 	xmlhttp.open("GET", "ping/latitude=" + lat + "&longitude=" + lon, true);
