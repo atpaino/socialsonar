@@ -66,7 +66,7 @@ function displayError(error) {
   offSetY = height/2 - height/30;
   radius = Math.min(offSetX,offSetY);
   theta = .75;
-  tweetData = [{r: .95, theta: 6},{r: .35, theta: 3},{r: .95, theta: 1},{r: .55, theta: 1.5},{r: .15, theta: .31}];
+  tweetData = [{polar: [6,.95]}];
   pi = Math.PI;
   green = "#00FF00";
   
@@ -135,10 +135,10 @@ function displayError(error) {
 			updateData();
 		}
 			
-	  circ.attr('cx', function(d, i) { return( radius * d.r * Math.cos(d.theta)); })
-	  .attr('cy', function(d, i) { return( radius * d.r * Math.sin(d.theta)); })
-	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return d.theta-lineAngle+3}else return 2*pi-(lineAngle - d.theta)+3;})
-	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return d.theta-lineAngle+3}else return 2*pi-(lineAngle - d.theta)+3;})
+	  circ.attr('cx', function(d, i) { return( radius * d.polar.[0] * Math.cos(d.polar.[1])); })
+	  .attr('cy', function(d, i) { return( radius * d.polar.[0] * Math.sin(d.polar.[1])); })
+	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.polar.[1] <= 2*pi) { return d.polar.[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar.[1])+3;})
+	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.polar.[1] <= 2*pi) { return d.polar.[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar.[1])+3;})
 	  .attr('fill', green)
 	  .on("click", function() {
 			alert("hello");
