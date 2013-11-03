@@ -28,6 +28,9 @@ csvwriter = csv.writer(csvfile)
 row = [ "user", "text", "latitude", "longitude" ]
 csvwriter.writerow(row)
 
+
+username = "slander36"
+
 # the twitter API only allows us to query up to 100 tweets at a time.
 # to search for more, we will break our search up into 10 "pages", each
 # of which will include 100 matching tweets.
@@ -35,7 +38,9 @@ for pagenum in range(1, 11):
 
         # perform a search based on latitude and longitude
         # twitter API docs: https://dev.twitter.com/docs/api/1/get/search
-        query = twitter.search(q = "", geocode = "51.474144,-0.035401,1km", rpp = 100, page = pagenum)
+#         query = twitter.statuses.filter(q = "", geocode = "51.474144,-0.035401,1km", rpp = 100, page = pagenum)
+        query = twitter.statuses.filter(locations = "51.474144,-0.035401", rpp = 100, page = pagenum)
+#         query = twitter.statuses.user_timeline(screen_name = username)
 
         for result in query["results"]:
                 # only process a result if it has a geolocation
