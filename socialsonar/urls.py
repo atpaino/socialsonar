@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from socialsonar import views
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -6,7 +7,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'socialsonar.views.home', name='home'),
+    url(r'^$', 'socialsonar.views.home', name='home'),
+    url(r'^ping/$', 'socialsonar.views.ping', name='home'),
     # url(r'^socialsonar/', include('socialsonar.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
