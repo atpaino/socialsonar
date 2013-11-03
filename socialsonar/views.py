@@ -52,7 +52,7 @@ def ping(request, latitude, longitude):
     # Build a JSON response out of it
     return HttpResponse(json.dumps(data), content_type="application/json")
     
-def tweetsFromGeo(latitude, longitude, radius="1m"):
+def tweetsFromGeo(latitude, longitude, radius="1mi"):
     geocode = "%s,%s,%s" % (latitude, longitude, radius)
     query = twitter.search.tweets(geocode = geocode, count=50)
     tweets = []
