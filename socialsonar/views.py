@@ -54,7 +54,7 @@ def ping(request, latitude, longitude):
     
 def tweetsFromGeo(latitude, longitude, radius="1m"):
     geocode = "%s,%s,%s" % (latitude, longitude, radius)
-    query = twitter.search.tweets(geocode = "38.95,-92.33,1mi", count=50)
+    query = twitter.search.tweets(geocode = geocode, count=50)
     tweets = []
     for result in query["statuses"]:
         tweets.append(result)
