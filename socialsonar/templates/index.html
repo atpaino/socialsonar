@@ -1,8 +1,9 @@
+{% load staticfiles %}
 <html>
 <head>
-<script type="text/javascript" src="../static/js/d3.v2.js"></script>
-<script	type="text/javascript" src="../static/js/jquery.js"></script>
-<link rel="stylesheet" href="../static/css/style.css">
+<script type="text/javascript" src="{% static "js/d3.v2.js" %}"></script>
+<script	type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+<link rel="stylesheet" href="{% static "css/style.css" %}">
 </head>
 <body>
 <div class="chart"></div>
