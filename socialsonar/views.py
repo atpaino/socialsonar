@@ -5,6 +5,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from twitter import *
+import cmath
 
 consumer_key = "O5Z1KINSBaDEQgTBB3FA"
 consumer_secret = "kf42pzVoDrmP4hoe9LNQW5t765J2zEspqdHQhotw"
@@ -27,8 +28,14 @@ def ping(request, latitude, longitude):
     # Create list of tweets, sorted by theta
     data = []
     for tweet in tweets:
-        if tweet["geo_enabled"] is False:
+        if tweet["geo"] is None:
             continue
+        coords = tweet["geo"]["coordinates"]
+        dx = latitude-coords[0]
+        dy = longitude-coords[1]
+        comp = complex(dx*69, dy*69)
+        p = cmath.polar(comp)
+        polar = [int(p[0]*100),p[1]]
         tweet =	{
             "id":tweet["id"],
             "text":tweet["text"],
@@ -38,10 +45,7 @@ def ping(request, latitude, longitude):
                 "screen_name":tweet["user"]["screen_name"],
                 "profile_image_url":tweet["user"]["profile_image_url"]
                 },
-            "geo":{
-                "latitude":tweet["geo"]["coodrinates"][0],
-                "longitude":tweet["geo"]["coodrinates"][1]
-                }
+            "polar":polar
             }
         data.append(tweet)
 
@@ -49,7 +53,8 @@ def ping(request, latitude, longitude):
     return HttpResponse(json.dumps(data), content_type="application/json")
     
 def tweetsFromGeo(latitude, longitude, radius="1m"):
-    query = twitter.search.tweets(geocode = "%f,%f,%s" % (latitude, longitude, radius))
+    geocode = "%s,%s,%s" % (latitude, longitude, radius)
+    query = twitter.search.tweets(geocode = "38.95,-92.33,1mi", count=50)
     tweets = []
     for result in query["statuses"]:
         tweets.append(result)
