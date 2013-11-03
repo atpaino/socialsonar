@@ -38,11 +38,11 @@ def ping(request, latitude, longitude):
         p = cmath.polar(comp)
         polar = ["%.2f" % p[0],p[1] if p[1] > 0 else p[1] + 2*math.pi]
         tweet =	{
-            "id":tweet["id"],
+            "id":str(tweet["id"]),
             "text":tweet["text"],
             "source":tweet["source"],
             "user":	{
-                "id":tweet["user"]["id"],
+                "id":str(tweet["user"]["id"]),
                 "screen_name":tweet["user"]["screen_name"],
                 "profile_image_url":tweet["user"]["profile_image_url"]
                 },
