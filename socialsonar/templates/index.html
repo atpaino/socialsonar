@@ -103,10 +103,7 @@ function displayError(error) {
   };
   
   function updateData() {
-  if (dbIndex == "") {
-		document.getElementById("selected_node_publications").innerHTML = "No Publications For This User";
-		return;
-	}
+
 	if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp = new XMLHttpRequest();
 	} else { // code for IE6, IE5
@@ -120,7 +117,6 @@ function displayError(error) {
 			circ = clockGroup.selectAll("ellipse")
 				.data(tweetData2)
 				.enter().append("ellipse");
-			document.getElementById("selected_node_publications").innerHTML = xmlhttp.responseText;
 		}
 	}
 	xmlhttp.open("GET", "ping/latitude=" + lat + "&longitude=" + lon, true);
@@ -141,7 +137,7 @@ function displayError(error) {
 	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.polar[1] <= 2*pi) { return d.polar[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar[1])+3;})
 	  .attr('fill', green)
 	  .on("click", function() {
-			alert("hello");
+			window.location("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
 	  });
 	  return render(data);
   }, 20);
