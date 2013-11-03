@@ -43,7 +43,7 @@ function displayError(error) {
   fields = function() {
     var currentTime, data, hour, minute, second;
     currentTime = new Date();
-    second = currentTime.getMilliseconds()/10;
+    second = (currentTime.getSeconds()%4)*1000 + currentTime.getMilliseconds();
     minute = currentTime.getMinutes();
     hour = currentTime.getHours() + minute / 60;
     return data = [
@@ -52,7 +52,7 @@ function displayError(error) {
         "numeric": second
       }, {
         "unit": "minutes",
-        "numeric": minute
+        "numeric": currentTime.getSeconds()
       }, {
         "unit": "hours",
         "numeric": hour
@@ -70,7 +70,7 @@ function displayError(error) {
   pi = Math.PI;
   green = "#00FF00";
   
-  scaleSecs = d3.scale.linear().domain([1, 99 + 99 / 100]).range([0, 2 * pi]);
+  scaleSecs = d3.scale.linear().domain([1, 3999]).range([0, 2 * pi]);
   
   vis = d3.selectAll(".chart").append("svg:svg").attr("width", width).attr("height", height);
   clockGroup = vis.append("svg:g").attr("transform", "translate(" + offSetX + "," + offSetY + ")");
@@ -123,11 +123,12 @@ function displayError(error) {
 	xmlhttp.send();
   }
 
+  updateData();
   setInterval(function() {
     var data;
     data = fields();
-		lineAngle = scaleSecs(data[0].numeric)-1;
-		if(data[0].numeric%800 ==0) {
+		lineAngle = scaleSecs(data[0].numeric)-pi/2;
+		if(data[1].numeric%4 ==0) {
 			updateData();
 		}
 			
