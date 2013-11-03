@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from twitter import *
 import cmath
+import math
 
 consumer_key = "O5Z1KINSBaDEQgTBB3FA"
 consumer_secret = "kf42pzVoDrmP4hoe9LNQW5t765J2zEspqdHQhotw"
@@ -35,7 +36,7 @@ def ping(request, latitude, longitude):
         dy = longitude-coords[1]
         comp = complex(dx*69, dy*69)
         p = cmath.polar(comp)
-        polar = [int(p[0]*100),p[1]]
+        polar = [int(p[0]*100),p[1] if p[1] > 0 else p[1] + 2*math.pi]
         tweet =	{
             "id":tweet["id"],
             "text":tweet["text"],
