@@ -110,7 +110,8 @@ function displayError(error) {
 	}
 	xmlhttp.onreadystatechange = function () {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			tweetData2 = xmlhttp.responseText;
+			tweetData2 = jQuery.parseJSON(xmlhttp.responseText);
+                        console.log(tweetData2);
 			//tweetData2 = [{r: .25, theta: 1.75},{r: .95, theta: .11},{r: .95, theta: 6},{r: .35, theta: 3},{r: .95, theta: 1},{r: .55, theta: 1.5},{r: .15, theta: .31}];
 			circ.remove();
 			circ = clockGroup.selectAll("ellipse")
