@@ -1,0 +1,75 @@
+<html>
+<head>
+<script type="text/javascript" src="js/d3.v2.js"></script>
+<script	type="text/javascript" src="js/jquery.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="chart"></div>
+<script>
+(function() {
+  var clockGroup, fields, height, offSetX, offSetY, pi, render, scaleHours, scaleMins, scaleSecs, vis, width, radius, green;
+
+  fields = function() {
+    var currentTime, data, hour, minute, second;
+    currentTime = new Date();
+    second = currentTime.getMilliseconds();
+    minute = currentTime.getMinutes();
+    hour = currentTime.getHours() + minute / 60;
+    return data = [
+      {
+        "unit": "seconds",
+        "numeric": second
+      }, {
+        "unit": "minutes",
+        "numeric": minute
+      }, {
+        "unit": "hours",
+        "numeric": hour
+      }
+    ];
+  };
+
+  width = $(window).width();
+  height = $(window).height();
+  offSetX = width/2 - width/30;
+  offSetY = height/2 - height/30;
+  radius = Math.min(offSetX,offSetY);
+  pi = Math.PI;
+  green = "#00FF00";
+  scaleSecs = d3.scale.linear().domain([1, 999 + 999 / 1000]).range([0, 2 * pi]);
+  
+  vis = d3.selectAll(".chart").append("svg:svg").attr("width", width).attr("height", height);
+  clockGroup = vis.append("svg:g").attr("transform", "translate(" + offSetX + "," + offSetY + ")");
+  clockGroup.append("svg:circle").attr("r", radius).attr("fill", "none").attr("class", "clock outercircle").attr("stroke", green).attr("stroke-width", 2);
+  clockGroup.append("svg:circle").attr("r", 4).attr("fill", green).attr("class", "clock innercircle");
+
+  render = function(data) {
+    var hourArc, minuteArc, secondArc;
+    clockGroup.selectAll(".clockhand").remove();
+    secondArc = d3.svg.arc().innerRadius(0).outerRadius(radius).startAngle(function(d) {
+      return scaleSecs(d.numeric);
+    }).endAngle(function(d) {
+      return scaleSecs(d.numeric);
+    });
+    return clockGroup.selectAll(".clockhand").data(data).enter().append("svg:path").attr("d", function(d) {
+      if (d.unit === "seconds") {
+        return secondArc(d);
+      }
+    }).attr("class", "clockhand").attr("stroke", green).attr("stroke-width", function(d) {
+      if (d.unit === "seconds") {
+        return 2;
+      }
+    }).attr("fill", "none");
+  };
+
+  setInterval(function() {
+    var data;
+    data = fields();
+    //console.log(data[2].numeric + ":" + data[1].numeric + ":" + data[0].numeric);
+    return render(data);
+  }, 15);
+}).call(this);
+</script>
+</body>
+</html>
