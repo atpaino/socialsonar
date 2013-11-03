@@ -3,10 +3,10 @@
 import json
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render_to_response
 
 def home(request):
-      return render(request, 'socialsonar/index.html', {})
+      return render_to_response('index.html', {})
 
 def ping(request, latitude, longitude):
       # Convert latitude and longitude to floating point type
