@@ -136,8 +136,9 @@ function displayError(error) {
 	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.polar[1] <= 2*pi) { return d.polar[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar[1])+3;})
 	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.polar[1] <= 2*pi) { return d.polar[1]-lineAngle+3}else return 2*pi-(lineAngle - d.polar[1])+3;})
 	  .attr('fill', green)
+	  .style('opacity',function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return (2*pi-((2*pi+lineAngle) - d.theta))/(2*pi);}else return (2*pi-(lineAngle - d.theta))/(2*pi);})
 	  .on("click", function(d) {
-			window.location("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
+		window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
 	  });
 	  
 	  circ.append("svg:title")
