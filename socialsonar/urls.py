@@ -8,7 +8,7 @@ from socialsonar import views
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'socialsonar.views.home', name='home'),
-    url(r'^ping/$', 'socialsonar.views.ping', name='home'),
+    url(r'^ping/latitude=([^&]+)\&longitude=(.+)$', 'socialsonar.views.ping', name='home'),
     # url(r'^socialsonar/', include('socialsonar.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

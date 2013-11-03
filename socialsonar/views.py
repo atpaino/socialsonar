@@ -1,9 +1,12 @@
 # Create your views here.
 
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def home(request):
-      return HttpResponse("Hello, world. You're at the poll index.")
+      return render(request, 'socialsonar/index.html', {})
 
-def ping(request):
-      return HttpResponse("Huhro ping")
+def ping(request, latitude, longitude):
+      latitude = float(latitude)
+      longitude = float(longitude)
+      return HttpResponse('Huhro ping from {}, {}'.format(latitude, longitude))
