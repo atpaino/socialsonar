@@ -1,8 +1,8 @@
 <html>
 <head>
-<script type="text/javascript" src="js/d3.v2.js"></script>
-<script	type="text/javascript" src="js/jquery.js"></script>
-<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="../static/js/d3.v2.js"></script>
+<script	type="text/javascript" src="../static/js/jquery.js"></script>
+<link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
 <div class="chart"></div>
@@ -13,7 +13,7 @@
   fields = function() {
     var currentTime, data, hour, minute, second;
     currentTime = new Date();
-    second = currentTime.getMilliseconds();
+    second = currentTime.getMilliseconds()/10;
     minute = currentTime.getMinutes();
     hour = currentTime.getHours() + minute / 60;
     return data = [
@@ -36,19 +36,25 @@
   offSetY = height/2 - height/30;
   radius = Math.min(offSetX,offSetY);
   theta = .75;
-  tweetData = [{r: .95, theta: 2},{r: .35, theta: 3},{r: .95, theta: 1},{r: .55, theta: 1.5},{r: .15, theta: .31}];
+  tweetData = [{r: .95, theta: 6},{r: .35, theta: 3},{r: .95, theta: 1},{r: .55, theta: 1.5},{r: .15, theta: .31}];
   pi = Math.PI;
   green = "#00FF00";
   
-  scaleSecs = d3.scale.linear().domain([1, 999 + 999 / 1000]).range([0, 2 * pi]);
+  scaleSecs = d3.scale.linear().domain([1, 99 + 99 / 100]).range([0, 2 * pi]);
   
   vis = d3.selectAll(".chart").append("svg:svg").attr("width", width).attr("height", height);
   clockGroup = vis.append("svg:g").attr("transform", "translate(" + offSetX + "," + offSetY + ")");
   clockGroup.append("svg:circle").attr("r", radius).attr("fill", "none").attr("class", "clock outercircle").attr("stroke", green).attr("stroke-width", 2);
   clockGroup.append("svg:circle").attr("r", 4).attr("fill", green).attr("class", "clock innercircle");
   
+  
+  var circ = clockGroup.selectAll("ellipse")
+		.data(tweetData)
+		.enter().append("ellipse");
+		
   render = function(data) {
     var hourArc, minuteArc, secondArc;
+	//console.log(scaleSecs(data[0].numeric));
     clockGroup.selectAll(".clockhand").remove();
     secondArc = d3.svg.arc().innerRadius(0).outerRadius(radius).startAngle(function(d) {
       return scaleSecs(d.numeric);
@@ -69,19 +75,17 @@
   setInterval(function() {
     var data;
     data = fields();
-	if(data[0].numeric%100==0) {
-		clockGroup.selectAll("ellipse").remove();
-		for(var k=0; k<tweetData.length; k++) {
-			clockGroup.append("ellipse")
-			  .attr('cx', function(d, i) { return( radius * tweetData[k].r * Math.cos(tweetData[k].theta)); })
-			  .attr('cy', function(d, i) { return( radius * tweetData[k].r * Math.sin(tweetData[k].theta)); })
-			  .attr('rx', 4)
-			  .attr('ry', 4)
-			  .attr('fill', green);
-		}
-	}
-    //console.log(data[2].numeric + ":" + data[1].numeric + ":" + data[0].numeric);
-    return render(data);
+		lineAngle = scaleSecs(data[0].numeric)-1;
+			
+	  circ.attr('cx', function(d, i) { return( radius * d.r * Math.cos(d.theta)); })
+	  .attr('cy', function(d, i) { return( radius * d.r * Math.sin(d.theta)); })
+	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return 2*pi-((2*pi+lineAngle) - d.theta)+3}else return 2*pi-(lineAngle - d.theta)+3;})
+	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return 2*pi-((2*pi+lineAngle) - d.theta)+3}else return 2*pi-(lineAngle - d.theta)+3;})
+	  .attr('fill', green)
+	  .on("click", function() {
+			alert("hello");
+	  });
+	  return render(data);
   }, 20);
 }).call(this);
 </script>
