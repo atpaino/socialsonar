@@ -1,3 +1,0 @@
-Follow instruction here:  
-
-https://github.com/ryanmcgrath/twython
