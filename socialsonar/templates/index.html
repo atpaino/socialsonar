@@ -7,6 +7,35 @@
 <body>
 <div class="chart"></div>
 <script>
+var hasHTML5 = false;
+var lat, lon;
+if (navigator.geolocation) {
+  var timeoutVal = 10 * 1000 * 1000;
+  navigator.geolocation.getCurrentPosition(
+    displayPosition, 
+    displayError,
+    { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 }
+  );
+}
+else {
+  alert("Geolocation is not supported by this browser");
+}
+
+function displayPosition(position) {
+	hasHTML5 = true;
+	lat = position.coords.latitude;
+	lon = position.coords.longitude;
+ // alert("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+}
+
+function displayError(error) {
+  var errors = { 
+    1: 'Permission denied',
+    2: 'Position unavailable',
+    3: 'Request timeout'
+  };
+  alert("Error: " + errors[error.code]);
+}
 (function() {
   var clockGroup, fields, height, offSetX, offSetY, pi, render, scaleHours, scaleMins, scaleSecs, vis, width, radius, green, tweetData;
 
@@ -71,16 +100,44 @@
       }
     }).attr("fill", "none");
   };
+  
+  function updateData() {
+  if (dbIndex == "") {
+		document.getElementById("selected_node_publications").innerHTML = "No Publications For This User";
+		return;
+	}
+	if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else { // code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function () {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			tweetData2 = xmlhttp.responseText;
+			//tweetData2 = [{r: .25, theta: 1.75},{r: .95, theta: .11},{r: .95, theta: 6},{r: .35, theta: 3},{r: .95, theta: 1},{r: .55, theta: 1.5},{r: .15, theta: .31}];
+			circ.remove();
+			circ = clockGroup.selectAll("ellipse")
+				.data(tweetData2)
+				.enter().append("ellipse");
+			document.getElementById("selected_node_publications").innerHTML = xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET", "ping/latitude=" + lat + "&longitude=" + lon, true);
+	xmlhttp.send();
+  }
 
   setInterval(function() {
     var data;
     data = fields();
 		lineAngle = scaleSecs(data[0].numeric)-1;
+		if(data[0].numeric%80 ==0) {
+			updateData();
+		}
 			
 	  circ.attr('cx', function(d, i) { return( radius * d.r * Math.cos(d.theta)); })
 	  .attr('cy', function(d, i) { return( radius * d.r * Math.sin(d.theta)); })
-	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return 2*pi-((2*pi+lineAngle) - d.theta)+3}else return 2*pi-(lineAngle - d.theta)+3;})
-	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return 2*pi-((2*pi+lineAngle) - d.theta)+3}else return 2*pi-(lineAngle - d.theta)+3;})
+	  .attr('rx', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return d.theta-lineAngle+3}else return 2*pi-(lineAngle - d.theta)+3;})
+	  .attr('ry', function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return d.theta-lineAngle+3}else return 2*pi-(lineAngle - d.theta)+3;})
 	  .attr('fill', green)
 	  .on("click", function() {
 			alert("hello");
@@ -88,6 +145,7 @@
 	  return render(data);
   }, 20);
 }).call(this);
+
 </script>
 </body>
 </html>
