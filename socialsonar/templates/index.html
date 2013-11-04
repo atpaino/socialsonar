@@ -4,6 +4,14 @@
 <script type="text/javascript" src="{% static "js/d3.v2.js" %}"></script>
 <script	type="text/javascript" src="{% static "js/jquery.js" %}"></script>
 <link rel="stylesheet" href="{% static "css/style.css" %}">
+<style>
+	.tempDiv {
+		position: absolute;
+		border-radius: 5px;
+		padding: 5px;
+		background: #ffffff;
+	}
+</style>
 </head>
 <body>
 <div class="chart"></div>
@@ -139,12 +147,31 @@ function displayError(error) {
 	  .style('opacity',function(d) {if((2*pi+lineAngle) - d.theta <= 2*pi) { return (2*pi-((2*pi+lineAngle) - d.theta))/(2*pi);}else return (2*pi-(lineAngle - d.theta))/(2*pi);})
 	  .on("click", function(d) {
 		window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
+	  })
+	  .on("mouseover", function(d) {
+		if(tempDiv)
+			tempDiv.parentElement.removeChild(tempDiv);
+			tempDiv = document.createElement("div");
+			tempDiv.className = "tempDiv";
+			userN = document.createElement("p");
+			userN.innerHTML = d.user.screen_name+":";
+			userN.style.color = "#0033ff";
+			tempP = document.createElement("p");
+			tempP.style.padding = 2;
+			tempP.style.margin = 0;
+			tempP.innerHTML = d.text;
+			tempDiv.appendChild(userN);
+			tempDiv.appendChild(tempP);
+			var position = $(this).position();
+			tempDiv.style.left = position.left;
+			tempDiv.style.top = position.top;
+			document.body.appendChild(tempDiv);
 	  });
 	  
-	  circ.append("svg:title")
-		.text(function (d) {
-			return d.text;
-		});
+	 // circ.append("svg:title")
+	//	.text(function (d) {
+	//		return d.text;
+	//	});
 	  return render(data);
   }, 20);
 }).call(this);
