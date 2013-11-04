@@ -149,8 +149,8 @@ function displayError(error) {
 		window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
 	  })
 	  .on("mouseover", function(d) {
-		if(tempDiv)
-			tempDiv.parentElement.removeChild(tempDiv);
+			if(tempDiv)
+				tempDiv.parentElement.removeChild(tempDiv);
 			tempDiv = document.createElement("div");
 			tempDiv.className = "tempDiv";
 			userN = document.createElement("p");
