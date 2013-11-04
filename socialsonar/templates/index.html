@@ -169,6 +169,7 @@ function displayError(error) {
 			var position = $(this).position();
 			tempDiv.style.left = position.left;
 			tempDiv.style.top = position.top;
+                        tempDiv.onclick = function() { window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id); };
 			document.body.appendChild(tempDiv);
 	  });
 	  
