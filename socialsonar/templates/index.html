@@ -4,6 +4,17 @@
 <script type="text/javascript" src="{% static "js/d3.v2.js" %}"></script>
 <script	type="text/javascript" src="{% static "js/jquery.js" %}"></script>
 <link rel="stylesheet" href="{% static "css/style.css" %}">
+<style type="text/css">
+  html {
+  overflow:hidden;
+  }
+	.tempDiv {
+		position: absolute;
+		border-radius: 5px;
+		padding: 5px;
+		background: #ffffff;
+	}
+</style>
 </head>
 <body>
 <div class="chart"></div>
@@ -38,7 +49,7 @@ function displayError(error) {
   alert("Error: " + errors[error.code]);
 }
 (function() {
-  var clockGroup, fields, height, offSetX, offSetY, pi, render, scaleHours, scaleMins, scaleSecs, vis, width, radius, green, tweetData;
+  var clockGroup, fields, height, offSetX, offSetY, pi, render, scaleHours, scaleMins, scaleSecs, vis, width, radius, green, tweetData, tempDiv;
 
   fields = function() {
     var currentTime, data, hour, minute, second;
@@ -150,12 +161,32 @@ function displayError(error) {
       })
 	  .on("click", function(d) {
 		window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id);
+	  })
+	  .on("mouseover", function(d) {
+			if(tempDiv)
+				tempDiv.parentElement.removeChild(tempDiv);
+			tempDiv = document.createElement("div");
+			tempDiv.className = "tempDiv";
+			userN = document.createElement("p");
+			userN.innerHTML = d.user.screen_name+":";
+			userN.style.color = "#0033ff";
+			tempP = document.createElement("p");
+			tempP.style.padding = 2;
+			tempP.style.margin = 0;
+			tempP.innerHTML = d.text;
+			tempDiv.appendChild(userN);
+			tempDiv.appendChild(tempP);
+			var position = $(this).position();
+			tempDiv.style.left = position.left;
+			tempDiv.style.top = position.top;
+                        tempDiv.onclick = function() { window.open("http://twitter.com/"+d.user.screen_name+"/status/"+d.id); };
+			document.body.appendChild(tempDiv);
 	  });
 	  
-	  circ.append("svg:title")
-		.text(function (d) {
-			return d.text;
-		});
+	 // circ.append("svg:title")
+	//	.text(function (d) {
+	//		return d.text;
+	//	});
 	  return render(data);
   }, 20);
 }).call(this);
